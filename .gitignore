@@ -10,6 +10,10 @@ backend/.venv/
 # database
 *.sqlite
 
+# python bytecode cache
+__pycache__/
+*.pyc
+
 # other
 sales-automation/
 
@@ -22,9 +26,12 @@ sales-automation/
 !.yarn/releases
 !.yarn/versions
 /coverage
-/.next/
+.next/
 /out/
 /build
+
+# npm lockfile (not committing)
+package-lock.json
 .DS_Store
 *.pem
 npm-debug.log*
