@@ -1,0 +1,14 @@
+# env files
+.env*
+
+# node dependencies
+node_modules/
+
+# python virtual environment
+backend/.venv/
+
+# database
+*.sqlite
+
+# other
+sales-automation/
