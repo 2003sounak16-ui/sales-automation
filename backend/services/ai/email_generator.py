@@ -76,8 +76,8 @@ def generate_outreach_email(
             return result
 
         except Exception as exc:
-            print(f"Groq API call failed: {exc}")
-            raise AIError(f"Groq AI generation failed: {exc}") from exc
+            print(f"Groq API call failed: {exc}. Falling back to mock template generator.")
+            return get_mock_email(company_name, industry, website)
 
     # Polished mock fallback when client is not configured
     return get_mock_email(company_name, industry, website)

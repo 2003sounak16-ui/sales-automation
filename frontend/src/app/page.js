@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://sales-backend-env.eba-szk7ushs.us-east-1.elasticbeanstalk.com';
+
 export default function Home() {
+
   const [activeTab, setActiveTab] = useState('dashboard');
   const [leads, setLeads] = useState([]);
   const [pendingLeads, setPendingLeads] = useState([]);
@@ -34,7 +37,7 @@ export default function Home() {
   const fetchLeads = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/leads');
+      const response = await fetch(`${API_BASE_URL}/api/leads`);
       if (response.ok) {
         const data = await response.json();
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -49,7 +52,7 @@ export default function Home() {
 
   const fetchPendingLeads = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/pending');
+      const response = await fetch(`${API_BASE_URL}/api/pending`);
       if (response.ok) {
         const data = await response.json();
         setPendingLeads(data);
@@ -61,7 +64,7 @@ export default function Home() {
 
   const fetchGlobalTimeline = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/timeline/recent');
+      const response = await fetch(`${API_BASE_URL}/api/timeline/recent`);
       if (response.ok) {
         const data = await response.json();
         setGlobalTimeline(data);
@@ -78,7 +81,7 @@ export default function Home() {
     } else {
       setDashboardSelectedLeadId(leadId);
       try {
-        const response = await fetch(`http://localhost:8000/api/timeline/${leadId}`);
+        const response = await fetch(`${API_BASE_URL}/api/timeline/${leadId}`);
         if (response.ok) {
           const data = await response.json();
           setDashboardLeadEvents(data);
@@ -91,7 +94,7 @@ export default function Home() {
 
   const loadTimeline = async (leadId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/timeline/${leadId}`);
+      const response = await fetch(`${API_BASE_URL}/api/timeline/${leadId}`);
       if (response.ok) {
         const data = await response.json();
         setTimelineEvents(data);
@@ -107,7 +110,7 @@ export default function Home() {
     setAnalyzing(true);
     showToast(`Initializing pipeline analysis for '${websiteQuery}'...`, 'info');
     try {
-      const response = await fetch('http://localhost:8000/api/company/analyze', {
+      const response = await fetch(`${API_BASE_URL}/api/company/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -145,7 +148,7 @@ export default function Home() {
   const handleApprove = async () => {
     if (!selectedLead) return;
     try {
-      const response = await fetch('http://localhost:8000/api/approve', {
+      const response = await fetch(`${API_BASE_URL}/api/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -176,7 +179,7 @@ export default function Home() {
       return;
     }
     try {
-      const response = await fetch('http://localhost:8000/api/send', {
+      const response = await fetch(`${API_BASE_URL}/api/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lead_id: selectedLead.id })
@@ -199,7 +202,7 @@ export default function Home() {
 
   const selectLeadForReview = async (lead) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/leads`);
+      const response = await fetch(`${API_BASE_URL}/api/leads`);
       if (response.ok) {
         const allLeads = await response.json();
         const freshLead = allLeads.find(l => l.id === lead.id);
@@ -236,7 +239,7 @@ export default function Home() {
     setPreviewLoading(true);
     setPreviewOpen(true);
     try {
-      const response = await fetch('http://localhost:8000/api/preview-email', {
+      const response = await fetch(`${API_BASE_URL}/api/preview-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

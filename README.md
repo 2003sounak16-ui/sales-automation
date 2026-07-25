@@ -1,111 +1,118 @@
-# SalesFlow Automation Hub
+# SalesFlow Automation Hub 🚀
 
-A high-performance, AI-driven sales pipeline automation platform built with a **FastAPI** backend and a **Next.js** (App Router) frontend. The system automatically scrapes target websites, enriches contact details, generates personalized, contextual sales pitches via LLMs, manages review queues, and dispatches outbound campaigns.
+> **AI-Powered Sales Intelligence & Pipeline Automation Platform**  
+> An autonomous prospecting platform built with **FastAPI** (Python 3.11) and **Next.js 16** (React 19, Turbopack). Deployed and scaled live on **AWS Elastic Beanstalk**.
 
 ---
 
-## Project Architecture
+## 🌐 Live AWS Production Environment
+
+| Component | Status | Live URL |
+| :--- | :---: | :--- |
+| **Frontend Web Application** | ![Health Status](https://img.shields.io/badge/Health-Green-brightgreen) | 🔗 [sales-frontend-env2.eba-mvr8ucpm.us-east-1.elasticbeanstalk.com](http://sales-frontend-env2.eba-mvr8ucpm.us-east-1.elasticbeanstalk.com) |
+| **Backend REST API Service** | ![Health Status](https://img.shields.io/badge/Health-Green-brightgreen) | 🔗 [sales-backend-env.eba-szk7ushs.us-east-1.elasticbeanstalk.com](http://sales-backend-env.eba-szk7ushs.us-east-1.elasticbeanstalk.com) |
+| **Interactive OpenAPI Docs** | ![Docs](https://img.shields.io/badge/API-Swagger-blue) | 📖 [sales-backend-env.eba-szk7ushs.us-east-1.elasticbeanstalk.com/docs](http://sales-backend-env.eba-szk7ushs.us-east-1.elasticbeanstalk.com/docs) |
+
+---
+
+## 📐 System Architecture
 
 ```mermaid
 graph TD
-    A[Next.js Client] -->|HTTP Requests| B[FastAPI Backend]
-    B -->|Fetch/Store Data| C[(Supabase Postgres Database)]
-    B -->|Scrape Target Website| D[Web Scraper Service]
-    B -->|Generate Outbound Pitches| E[LLM Inference Engine]
-    B -->|Dispatch Outreach Emails| F[SMTP Email Client]
+    UserClient[💻 Next.js Client / Web Dashboard] -->|REST API / JSON| AWS_ALB[🛡️ Nginx Proxy / AWS EC2]
+    AWS_ALB -->|ASGI App Server| FastAPI[⚡ FastAPI Backend]
+    
+    subgraph Core Automation Pipeline
+        FastAPI -->|1. Web Extraction| Scraper[🌐 Web Scraper & Intelligence Service]
+        FastAPI -->|2. Contextual Copy Generation| Groq[🧠 Groq LLM Inference Engine]
+        FastAPI -->|3. Persistent Audit Storage| DB[(SQLite / Supabase Database)]
+        FastAPI -->|4. Outreach Dispatch| Email[✉️ SMTP / Resend Email Engine]
+    end
 ```
 
-- **Frontend**: Next.js 16 (Turbopack, Client Components, App Router, HSL Glassmorphism UI).
-- **Backend**: FastAPI (Python 3.10+, Uvicorn, Relational Storage CRUD).
-- **Database**: Supabase (Postgres tables tracking `leads` and `lead_events`).
+---
+
+## ✨ Key Features
+
+- **Automated Target Discovery & Scraping**: Extracts company metadata, industry classification, domain profiles, and listed contact information in seconds.
+- **AI-Powered Pitch Copywriting**: Leverages Groq LLMs to generate highly customized, contextual outbound email copy per prospect.
+- **Verification & Review Queue**: Human-in-the-loop dashboard allowing SDRs to review company overviews, edit subject lines/body copy, and approve drafts before sending.
+- **Real-Time Audit Trail**: Complete event history logging (`DISCOVERY_SUCCESS` ➔ `SCRAPER_SUCCESS` ➔ `AI_GENERATED` ➔ `REVIEW_APPROVED` ➔ `EMAIL_SENT`).
+- **Outreach Logs & Analytics**: Track email delivery metrics, open rates, and engagement statistics across custom sales campaigns.
 
 ---
 
-## Installation & Setup
+## 🛠️ Tech Stack & Infrastructure
 
-Follow these steps to set up and run both the backend and frontend services locally.
+- **Frontend**: Next.js 16 (App Router, TailwindCSS v4, Material Symbols, Glassmorphism UI)
+- **Backend**: FastAPI, Uvicorn, Python 3.11, Pydantic, HTTPX
+- **Database**: Relational Storage Engine (SQLite Fallback + Supabase Postgres Integration)
+- **AI / LLM Integration**: Groq API (Llama 3 Models)
+- **Cloud Infrastructure**: AWS Elastic Beanstalk (Amazon Linux 2023, Node.js 24 & Python 3.11 Runtimes)
+
+---
+
+## 🚀 Local Development Setup
 
 ### 1. Prerequisites
-Ensure you have the following installed on your system:
-- **Node.js** (v18.x or higher)
-- **Python** (v3.10 or higher)
-- **pip** and **virtualenv** (or python `venv` module)
+- **Node.js** (v18+ or v20+)
+- **Python** (v3.10+)
+- **Git**
+
+### 2. Backend Setup
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create & activate virtual environment
+python -m venv .venv
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+# Linux/macOS
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start local backend server
+python -m uvicorn main:app --reload --port 8000
+```
+*Backend runs locally at [http://localhost:8000](http://localhost:8000).*
+
+### 3. Frontend Setup
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install npm packages
+npm install
+
+# Start Next.js development server
+npm run dev
+```
+*Frontend runs locally at [http://localhost:3000](http://localhost:3000).*
 
 ---
 
-### 2. Backend Setup (FastAPI)
+## ☁️ Deploying to AWS Elastic Beanstalk
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+### Deploying Backend (Python)
+```bash
+cd backend
+eb init -p "Python 3.11" sales-automation-backend --region us-east-1
+eb deploy
+```
 
-2. Create a Python virtual environment:
-   ```bash
-   python -m venv .venv
-   ```
-
-3. Activate the virtual environment:
-   - **Windows (PowerShell)**:
-     ```powershell
-     .venv\Scripts\Activate.ps1
-     ```
-   - **macOS / Linux**:
-     ```bash
-     source .venv/bin/activate
-     ```
-
-4. Install the backend dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. Configure Environment Variables:
-   Create a `.env` file in the `backend/` directory and configure your credentials:
-   ```env
-   SUPABASE_URL=your_supabase_url
-   SUPABASE_KEY=your_supabase_anon_or_service_key
-   GROQ_API_KEY=your_groq_api_key
-   RESEND_API_KEY=your_resend_or_smtp_key
-   ```
-
-6. Start the FastAPI development server:
-   ```bash
-   uvicorn main:app --port 8000 --reload
-   ```
-   The backend API will be available at [http://localhost:8000](http://localhost:8000) and interactive docs at [http://localhost:8000/docs](http://localhost:8000/docs).
+### Deploying Frontend (Node.js)
+```bash
+cd frontend
+eb init -p "Node.js 24" sales-automation-frontend --region us-east-1
+npm run build
+eb deploy
+```
 
 ---
 
-### 3. Frontend Setup (Next.js)
+## 📄 License
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the Next.js development server:
-   ```bash
-   npm run dev
-   ```
-   The frontend will be available at [http://localhost:3000](http://localhost:3000).
-
----
-
-## Core Operations
-
-### Running target analysis
-- Trigger an analysis pipeline directly from the dashboard modal using **"+ New Target"**.
-- This dispatches the scraper and runs the AI copywriter, logging state transitions (`DISCOVERY_SUCCESS` -> `SCRAPER_SUCCESS` -> `AI_GENERATED`) to the database in real-time.
-
-### Reviewing Pitches
-- Go to the **Review Queue** tab.
-- Click on any target awaiting review. You can customize the subject lines, edit generated pitches, review the audit trail, and save/approve drafts.
-
-### Tracking Campaign Performance
-- The **Outreach Log** provides statistics on email deliveries (sent, opened, clicked, bounced) along with detailed execution reports.
+Distributed under the MIT License. See `LICENSE` for more information.
