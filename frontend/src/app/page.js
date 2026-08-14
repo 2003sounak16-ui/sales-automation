@@ -28,6 +28,10 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [logFilter, setLogFilter] = useState('ALL');
   const [campaignDropdownOpen, setCampaignDropdownOpen] = useState(false);
+  const [trendingCompanies, setTrendingCompanies] = useState([]);
+  const [trendingSearch, setTrendingSearch] = useState('');
+  const [trendingIndustryFilter, setTrendingIndustryFilter] = useState('ALL');
+
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -73,6 +77,26 @@ export default function Home() {
       console.error('Failed to load global timeline', err);
     }
   };
+
+  const fetchTrendingCompanies = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/companies/trending`);
+      if (response.ok) {
+        const data = await response.json();
+        setTrendingCompanies(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch trending companies', err);
+    }
+  };
+
+  const handleAnalyzeTrendingCompany = async (comp) => {
+    setWebsiteQuery(comp.website_url);
+    setIndustryQuery(comp.industry);
+    setCountryQuery(comp.country || 'United States');
+    setIsModalOpen(true);
+  };
+
 
   const handleDashboardLeadClick = async (leadId) => {
     if (dashboardSelectedLeadId === leadId) {
@@ -272,10 +296,12 @@ export default function Home() {
       await fetchLeads();
       await fetchPendingLeads();
       await fetchGlobalTimeline();
+      await fetchTrendingCompanies();
     };
     initData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const formatEventDescription = (event, fallbackName) => {
     const company = event.leads?.company_name || fallbackName || 'Unknown Company';
@@ -353,12 +379,20 @@ export default function Home() {
             <span className="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded-full">{pendingLeads.length}</span>
           </button>
           <button 
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'trending' ? 'text-primary-container bg-primary-container/10 border-l-4 border-primary-container font-bold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}`}
+            onClick={() => setActiveTab('trending')}
+          >
+            <span className="material-symbols-outlined group-hover:text-primary-container text-amber-400">trending_up</span>
+            <span>Trending Companies</span>
+          </button>
+          <button 
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'history' ? 'text-primary-container bg-primary-container/10 border-l-4 border-primary-container font-bold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}`}
             onClick={() => setActiveTab('history')}
           >
             <span className="material-symbols-outlined group-hover:text-primary-container">history</span>
             <span>Outreach Log</span>
           </button>
+
         </nav>
         <div className="border-t border-white/5 mt-auto pt-4 pb-6 px-4 space-y-1">
           <button className="w-full flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-300 rounded-lg text-left bg-transparent border-none cursor-pointer">
@@ -968,6 +1002,154 @@ export default function Home() {
             </section>
           </div>
         )}
+
+        {activeTab === 'trending' && (
+          <div className="tab-pane">
+            <div className="page-header text-left" style={{ marginBottom: '2rem' }}>
+              <div className="flex justify-between items-start flex-wrap gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-500/20 uppercase tracking-wider flex items-center gap-1">
+                      <span className="material-symbols-outlined text-xs">local_fire_department</span> High Growth Market
+                    </span>
+                  </div>
+                  <h1 className="text-3xl font-extrabold text-on-surface mb-2">Trending Companies</h1>
+                  <p className="text-on-surface-variant">High-intent tech targets with active growth signals ready for outreach pipeline ingestion.</p>
+                </div>
+                <button
+                  className="bg-primary-container text-on-primary-container font-bold px-5 py-2.5 rounded-full flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all text-sm border-none cursor-pointer"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <span className="material-symbols-outlined text-sm">add</span>
+                  <span>Analyze Custom URL</span>
+                </button>
+              </div>
+            </div>
+
+            <section className="stats-grid" style={{ marginBottom: '2rem' }}>
+              <div className="stat-card">
+                <div className="stat-icon-wrapper">
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px', color: 'var(--color-primary)' }}>trending_up</span>
+                </div>
+                <div className="stat-label">Trending Verified Targets</div>
+                <div className="stat-value">{trendingCompanies.length} Companies</div>
+                <div className="stat-trend positive"><span>Active Market Tracking</span></div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon-wrapper">
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#10b981' }}>rocket_launch</span>
+                </div>
+                <div className="stat-label">Average YoY Growth</div>
+                <div className="stat-value">+75.8%</div>
+                <div className="stat-trend positive"><span>Accelerating velocity</span></div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon-wrapper">
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#f59e0b' }}>psychology</span>
+                </div>
+                <div className="stat-label">Top Industry Sector</div>
+                <div className="stat-value">AI & Cloud Dev Tools</div>
+                <div className="stat-trend positive"><span>High Outbound Intent</span></div>
+              </div>
+            </section>
+
+            <div className="flex flex-col md:flex-row gap-4 mb-6 justify-between items-center bg-surface-container-low/40 p-4 rounded-xl border border-white/5">
+              <div className="relative w-full md:w-80">
+                <span className="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-sm">search</span>
+                <input
+                  type="text"
+                  placeholder="Search trending companies..."
+                  className="w-full bg-surface-container-lowest border border-white/10 rounded-lg pl-9 pr-4 py-2 text-xs text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary-container/50"
+                  value={trendingSearch}
+                  onChange={(e) => setTrendingSearch(e.target.value)}
+                />
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto">
+                {['ALL', 'Developer Tools', 'Cloud Platform', 'Vector DB', 'SaaS'].map((ind) => (
+                  <button
+                    key={ind}
+                    onClick={() => setTrendingIndustryFilter(ind)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer ${
+                      trendingIndustryFilter === ind
+                        ? 'bg-primary-container/20 border-primary-container text-primary-container font-bold'
+                        : 'bg-surface-container-lowest/50 border-white/10 text-on-surface-variant hover:text-on-surface'
+                    }`}
+                  >
+                    {ind}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+              {trendingCompanies
+                .filter(c => {
+                  const matchSearch = c.company_name.toLowerCase().includes(trendingSearch.toLowerCase()) || c.description.toLowerCase().includes(trendingSearch.toLowerCase());
+                  const matchInd = trendingIndustryFilter === 'ALL' || c.industry.toLowerCase().includes(trendingIndustryFilter.toLowerCase());
+                  return matchSearch && matchInd;
+                })
+                .map(comp => (
+                  <div key={comp.id} className="bg-surface-container/60 border border-white/10 hover:border-primary-container/40 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between group shadow-lg">
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-primary-container/10 border border-primary-container/30 flex items-center justify-center text-primary-container font-extrabold text-lg">
+                            {comp.company_name.charAt(0)}
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-on-surface text-lg m-0 group-hover:text-primary-container transition-colors">{comp.company_name}</h3>
+                            <a href={comp.website_url} target="_blank" rel="noreferrer" className="text-xs text-on-surface-variant/80 hover:text-primary-container flex items-center gap-1 mt-0.5 no-underline">
+                              {comp.website_url.replace('https://', '')}
+                              <span className="material-symbols-outlined text-[10px]">open_in_new</span>
+                            </a>
+                          </div>
+                        </div>
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          {comp.growth_rate}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <span className="bg-surface-container-high text-on-surface-variant text-[10px] font-semibold px-2 py-0.5 rounded">
+                          {comp.industry}
+                        </span>
+                        <span className="bg-surface-container-high text-on-surface-variant text-[10px] font-semibold px-2 py-0.5 rounded">
+                          👥 {comp.employee_count}
+                        </span>
+                        <span className="bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px] font-semibold px-2 py-0.5 rounded">
+                          🔥 {comp.intent_score}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-on-surface-variant leading-relaxed mb-4">
+                        {comp.description}
+                      </p>
+
+                      <div className="bg-surface-container-lowest/40 rounded-xl p-3 border border-white/5 mb-4">
+                        <p className="text-[11px] font-bold text-on-surface-variant/80 uppercase tracking-wider mb-2 flex items-center gap-1 m-0">
+                          <span className="material-symbols-outlined text-xs text-primary-container">insights</span> Market Signals
+                        </p>
+                        <ul className="m-0 pl-4 space-y-1 text-xs text-on-surface-variant">
+                          {comp.signals.map((sig, i) => (
+                            <li key={i}>{sig}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <button
+                      className="w-full bg-primary-container/10 hover:bg-primary-container hover:text-on-primary-container text-primary-container font-bold py-2.5 px-4 rounded-xl border border-primary-container/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 text-xs"
+                      onClick={() => handleAnalyzeTrendingCompany(comp)}
+                    >
+                      <span className="material-symbols-outlined text-sm">auto_awesome</span>
+                      <span>Analyze & Add to Outreach</span>
+                    </button>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* Email Preview Modal */}
