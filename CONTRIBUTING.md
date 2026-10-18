@@ -10,14 +10,16 @@ Thank you for your interest in contributing to SalesFlow Automation Hub!
    git checkout -b feature/my-new-feature
    ```
 3. **Set up the environments**:
-   - Backend: Python 3.11 with FastAPI (see `backend/README.md`)
-   - Frontend: Node.js 18+ with Next.js (see `frontend/README.md`)
-4. **Test your changes**:
-   - Run unit and integration tests locally before submitting.
+   - Backend: Python 3.11 with FastAPI (see [Backend Setup](README.md#2-backend-setup))
+   - Frontend: Node.js 18+ with Next.js (see [Frontend Setup](README.md#3-frontend-setup))
+4. **Verify your changes**:
+   - Run frontend linter: `cd frontend && npm run lint`
+   - Verify backend runs locally without import or syntax errors (`uvicorn main:app --reload`)
+   *(Note: Automated test suites are currently in progress and not yet configured)*.
 5. **Open a Pull Request**:
    - Provide a concise description of your changes.
    - Wait for automated code analysis and reviews.
 
 ## Code Standards
 - Follow PEP 8 guidelines for Python backend code.
-- Ensure TypeScript / ESLint checks pass for the frontend.
+- Ensure ESLint checks pass for the frontend (`npm run lint`).
