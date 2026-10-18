@@ -14,7 +14,7 @@ Thank you for your interest in contributing to SalesFlow Automation Hub!
    - Frontend: Node.js 18+ with Next.js (see [Frontend Setup](README.md#3-frontend-setup))
 4. **Verify your changes**:
    - Run frontend linter: `cd frontend && npm run lint`
-   - Verify backend runs locally without import or syntax errors (`uvicorn main:app --reload`)
+   - Verify backend runs locally: switch to backend (`cd ../backend` or from root `cd backend`) and run `uvicorn main:app --reload`
    *(Note: Automated test suites are currently in progress and not yet configured)*.
 5. **Open a Pull Request**:
    - Provide a concise description of your changes.
