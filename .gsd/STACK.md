@@ -57,4 +57,4 @@
 | `RESEND_API_KEY` | Optional | API token for outreach email delivery via Resend |
 | `SUPABASE_URL` | Optional | Cloud database endpoint (falls back to SQLite if unset) |
 | `SUPABASE_KEY` | Optional | Supabase service key / anon key |
-| `NEXT_PUBLIC_API_URL` | Frontend | Target backend API URL (defaults to localhost:8000) |
+| `NEXT_PUBLIC_API_URL` | Frontend | Target backend API URL (defaults to the deployed Elastic Beanstalk backend; set to `http://localhost:8000` for local development) |

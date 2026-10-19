@@ -101,20 +101,24 @@ If DECISIONS.md or JOURNAL.md contain entries from a previous milestone, reset t
 
 **PowerShell:**
 ```powershell
+$ErrorActionPreference = "Stop"
 # Archive decisions and journal if files contain entries from previous work
 $archiveDir = ".gsd/milestones/pre-$name"
 if (Test-Path -LiteralPath $archiveDir) {
     Write-Error "Backup destination already exists: $archiveDir"
     exit 1
 }
-if ((Test-Path ".gsd/DECISIONS.md") -and (Get-Content ".gsd/DECISIONS.md" | Measure-Object -Line).Lines -gt 5) {
-    New-Item -ItemType Directory -Path $archiveDir | Out-Null
-    Copy-Item ".gsd/DECISIONS.md" "$archiveDir/DECISIONS.md"
+$archiveDecisions = (Test-Path ".gsd/DECISIONS.md") -and (Get-Content ".gsd/DECISIONS.md" | Measure-Object -Line).Lines -gt 5
+$archiveJournal = (Test-Path ".gsd/JOURNAL.md") -and (Get-Content ".gsd/JOURNAL.md" | Measure-Object -Line).Lines -gt 5
+if ($archiveDecisions -or $archiveJournal) {
+    New-Item -ItemType Directory -Force -Path $archiveDir | Out-Null
+    if ($archiveDecisions) { Copy-Item ".gsd/DECISIONS.md" "$archiveDir/DECISIONS.md" -ErrorAction Stop }
+    if ($archiveJournal) { Copy-Item ".gsd/JOURNAL.md" "$archiveDir/JOURNAL.md" -ErrorAction Stop }
+}
+if ($archiveDecisions) {
     Set-Content ".gsd/DECISIONS.md" "# Decisions`n`n> Previous decisions archived in $archiveDir/DECISIONS.md`n`n---`n"
 }
-if ((Test-Path ".gsd/JOURNAL.md") -and (Get-Content ".gsd/JOURNAL.md" | Measure-Object -Line).Lines -gt 5) {
-    New-Item -ItemType Directory -Path $archiveDir | Out-Null
-    Copy-Item ".gsd/JOURNAL.md" "$archiveDir/JOURNAL.md"
+if ($archiveJournal) {
     Set-Content ".gsd/JOURNAL.md" "# Journal`n`n> Previous journal entries archived in $archiveDir/JOURNAL.md`n`n---`n"
 }
 ```
@@ -126,14 +130,27 @@ if [ -e "$archive_dir" ]; then
     echo "Error: backup destination already exists: $archive_dir" >&2
     exit 1
 fi
+archive_decisions=false
+archive_journal=false
 if [ -f ".gsd/DECISIONS.md" ] && [ "$(wc -l < .gsd/DECISIONS.md)" -gt 5 ]; then
-    mkdir "$archive_dir"
-    cp ".gsd/DECISIONS.md" "$archive_dir/DECISIONS.md"
-    printf "# Decisions\n\n> Previous decisions archived in %s/DECISIONS.md\n\n---\n" "$archive_dir" > .gsd/DECISIONS.md
+    archive_decisions=true
 fi
 if [ -f ".gsd/JOURNAL.md" ] && [ "$(wc -l < .gsd/JOURNAL.md)" -gt 5 ]; then
-    mkdir -p "$archive_dir"
-    cp ".gsd/JOURNAL.md" "$archive_dir/JOURNAL.md"
+    archive_journal=true
+fi
+if [ "$archive_decisions" = true ] || [ "$archive_journal" = true ]; then
+    mkdir -p "$archive_dir" || exit 1
+    if [ "$archive_decisions" = true ]; then
+        cp ".gsd/DECISIONS.md" "$archive_dir/DECISIONS.md" || exit 1
+    fi
+    if [ "$archive_journal" = true ]; then
+        cp ".gsd/JOURNAL.md" "$archive_dir/JOURNAL.md" || exit 1
+    fi
+fi
+if [ "$archive_decisions" = true ]; then
+    printf "# Decisions\n\n> Previous decisions archived in %s/DECISIONS.md\n\n---\n" "$archive_dir" > .gsd/DECISIONS.md
+fi
+if [ "$archive_journal" = true ]; then
     printf "# Journal\n\n> Previous journal entries archived in %s/JOURNAL.md\n\n---\n" "$archive_dir" > .gsd/JOURNAL.md
 fi
 ```

@@ -15,7 +15,7 @@ SalesFlow Automation Hub is an AI-powered sales intelligence and outbound pipeli
                          ▼
 ┌───────────────────────────────────────────────────────────────┐
 │               FastAPI Backend Application (Python 3.11)       │
-│  /api/company  •  /api/review  •  /api/email  •  /api/dashboard│
+│ /api/company/analyze • /api/pending • /api/approve • /api/send│
 └──────┬─────────────────┬──────────────────┬───────────────────┘
        │                 │                  │
        ▼                 ▼                  ▼
@@ -40,9 +40,9 @@ SalesFlow Automation Hub is an AI-powered sales intelligence and outbound pipeli
 - **Location:** `backend/api/`
 - **Pattern:** FastAPI Modular Routers
 - **Endpoints:**
-  - `company.py`: Company analysis submission and pipeline triggering (`POST /api/analyze-company`).
-  - `review.py`: Pending lead management, copy editing, and approval workflow (`GET /api/leads/pending`, `POST /api/leads/{id}/approve`).
-  - `email.py`: Email dispatch via Resend / SMTP (`POST /api/send-email`).
+  - `company.py`: Company analysis submission and pipeline triggering (`POST /api/company/analyze`).
+  - `review.py`: Pending lead management and approval workflow (`GET /api/pending`, `POST /api/approve`).
+  - `email.py`: Email dispatch via SMTP (`POST /api/send`).
   - `dashboard.py`: Summary statistics, conversion funnel counts, and audit logs.
   - `health.py`: Service health and database ping probes.
 
@@ -77,12 +77,12 @@ SalesFlow Automation Hub is an AI-powered sales intelligence and outbound pipeli
 ## Data Flow
 
 1. **User Request**: User inputs company name and website URL in the Next.js UI.
-2. **Analysis Trigger**: UI calls `POST /api/analyze-company` on FastAPI.
+2. **Analysis Trigger**: UI calls `POST /api/company/analyze` on FastAPI.
 3. **Extraction**: `scrape_website()` fetches DOM, parses metadata, extracts emails, and logs `SCRAPER_SUCCESS`.
 4. **AI Generation**: `generate_outreach_email()` prompts Groq with company context to generate pitch email copy.
 5. **Verification Queue**: Lead is persisted in state `PENDING_REVIEW`.
-6. **Human-in-the-Loop Review**: SDR inspects the generated pitch on the dashboard, modifies subject/body if needed, and clicks "Approve".
-7. **Outreach Dispatch**: `POST /api/send-email` delivers the email via Resend and logs `EMAIL_SENT`.
+6. **Human-in-the-Loop Review**: SDR inspects the generated pitch on the dashboard, modifies subject/body if needed, and clicks "Approve"; the UI calls `POST /api/approve`.
+7. **Outreach Dispatch**: `POST /api/send` delivers the email via SMTP and logs `EMAIL_SENT`.
 
 ---
 
