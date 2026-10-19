@@ -92,6 +92,15 @@ npm run dev
 ```
 *Frontend runs locally at [http://localhost:3000](http://localhost:3000).*
 
+### 4. Playwright End-to-End Checks
+```bash
+cd frontend
+npm ci
+npx playwright install chromium
+npm run test:e2e
+```
+The Playwright config starts the frontend automatically and stubs API responses, so the checks do not call the deployed backend.
+
 ---
 
 ## ☁️ Deploying to AWS Elastic Beanstalk
