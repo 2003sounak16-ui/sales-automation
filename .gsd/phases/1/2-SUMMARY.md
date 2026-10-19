@@ -38,10 +38,11 @@ status: complete
 
 Ran `pytest` inside backend virtual environment:
 ```
-backend\tests\test_health.py::test_root_endpoint PASSED                  [ 25%]
-backend\tests\test_health.py::test_health_check_endpoint PASSED          [ 50%]
-backend\tests\test_health.py::test_mock_groq_fixture PASSED              [ 75%]
-backend\tests\test_health.py::test_mock_smtp_fixture PASSED              [100%]
-======================== 4 passed in 0.09s =========================
+backend\tests\test_health.py::test_root_endpoint PASSED                  [ 20%]
+backend\tests\test_health.py::test_health_check_endpoint PASSED          [ 40%]
+backend\tests\test_health.py::test_mock_groq_fixture PASSED              [ 60%]
+backend\tests\test_health.py::test_mock_smtp_fixture PASSED              [ 80%]
+backend\tests\test_health.py::test_mock_ddg_fixture PASSED               [100%]
+======================== 5 passed in 0.10s =========================
 ```
-All 4 tests executed in 90ms with 100% pass rate.
+All 5 tests executed with 100% pass rate.
