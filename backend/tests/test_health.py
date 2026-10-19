@@ -38,3 +38,14 @@ def test_mock_smtp_fixture(mock_smtp_send):
     res = send_outreach_email_via_smtp("test@example.com", "Subject", "Body")
     assert res["status"] == "success"
     assert res["id"] == "mock-smtp-9999"
+
+def test_mock_ddg_fixture(mock_ddg_search):
+    """
+    Verify mock DuckDuckGo search fixture intercepts company discovery.
+    """
+    from services.discovery.duckduckgo import DuckDuckGoDiscovery
+    discovery = DuckDuckGoDiscovery()
+    results = discovery.discover_companies("Technology")
+    assert len(results) == 2
+    assert results[0]["company"] == "Acme Robotics"
+
