@@ -447,4 +447,3 @@ Plans:
 | `planner` | Detailed planning methodology |
 | `plan-checker` | Validates plans before execution |
 </related>
-
