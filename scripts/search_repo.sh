@@ -50,7 +50,7 @@ while [ $i -lt ${#EXTRA_ARGS[@]} ]; do
     arg="${EXTRA_ARGS[$i]}"
     case "$arg" in
         --type)
-            ((i++))
+            i=$((i + 1))
             if [ $i -lt ${#EXTRA_ARGS[@]} ]; then
                 type_arg="${EXTRA_ARGS[$i]}"
                 GREP_ARGS+=("--include=*.$type_arg")
@@ -60,10 +60,11 @@ while [ $i -lt ${#EXTRA_ARGS[@]} ]; do
             GREP_ARGS+=("$arg")
             ;;
     esac
-    ((i++))
+    i=$((i + 1))
 done
 
 grep -rn "$PATTERN" "$SEARCH_PATH" "${GREP_ARGS[@]}" --color=always 2>/dev/null || {
     echo "No matches found for: $PATTERN"
     exit 0
 }
+

@@ -103,13 +103,17 @@ If DECISIONS.md or JOURNAL.md contain entries from a previous milestone, reset t
 ```powershell
 # Archive decisions and journal if files contain entries from previous work
 $archiveDir = ".gsd/milestones/pre-$name"
+if (Test-Path -LiteralPath $archiveDir) {
+    Write-Error "Backup destination already exists: $archiveDir"
+    exit 1
+}
 if ((Test-Path ".gsd/DECISIONS.md") -and (Get-Content ".gsd/DECISIONS.md" | Measure-Object -Line).Lines -gt 5) {
-    New-Item -ItemType Directory -Force $archiveDir | Out-Null
+    New-Item -ItemType Directory -Path $archiveDir | Out-Null
     Copy-Item ".gsd/DECISIONS.md" "$archiveDir/DECISIONS.md"
     Set-Content ".gsd/DECISIONS.md" "# Decisions`n`n> Previous decisions archived in $archiveDir/DECISIONS.md`n`n---`n"
 }
 if ((Test-Path ".gsd/JOURNAL.md") -and (Get-Content ".gsd/JOURNAL.md" | Measure-Object -Line).Lines -gt 5) {
-    New-Item -ItemType Directory -Force $archiveDir | Out-Null
+    New-Item -ItemType Directory -Path $archiveDir | Out-Null
     Copy-Item ".gsd/JOURNAL.md" "$archiveDir/JOURNAL.md"
     Set-Content ".gsd/JOURNAL.md" "# Journal`n`n> Previous journal entries archived in $archiveDir/JOURNAL.md`n`n---`n"
 }
@@ -118,8 +122,12 @@ if ((Test-Path ".gsd/JOURNAL.md") -and (Get-Content ".gsd/JOURNAL.md" | Measure-
 **Bash:**
 ```bash
 archive_dir=".gsd/milestones/pre-$name"
+if [ -e "$archive_dir" ]; then
+    echo "Error: backup destination already exists: $archive_dir" >&2
+    exit 1
+fi
 if [ -f ".gsd/DECISIONS.md" ] && [ "$(wc -l < .gsd/DECISIONS.md)" -gt 5 ]; then
-    mkdir -p "$archive_dir"
+    mkdir "$archive_dir"
     cp ".gsd/DECISIONS.md" "$archive_dir/DECISIONS.md"
     printf "# Decisions\n\n> Previous decisions archived in %s/DECISIONS.md\n\n---\n" "$archive_dir" > .gsd/DECISIONS.md
 fi
@@ -163,3 +171,4 @@ Phases: {N}
 ```
 
 </process>
+

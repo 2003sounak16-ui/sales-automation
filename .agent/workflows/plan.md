@@ -126,7 +126,7 @@ if (-not (Test-Path ".gsd/SPEC.md")) {
     exit 1
 }
 $spec = Get-Content ".gsd/SPEC.md" -Raw
-if ($spec -notmatch "(?m)^\s*>\s*\*\*Status\*\*:\s*`?FINALIZED`?") {
+if ($spec -notmatch '(?m)^\s*>\s*\*\*Status\*\*:\s*`?FINALIZED`?\s*$') {
     Write-Error "SPEC.md must have Status: FINALIZED before planning"
     exit 1
 }
@@ -139,7 +139,7 @@ if [ ! -f ".gsd/SPEC.md" ]; then
     echo "Error: .gsd/SPEC.md not found" >&2
     exit 1
 fi
-if ! grep -qiE "^\s*>\s*\*\*Status\*\*:\s*`?FINALIZED`?" ".gsd/SPEC.md"; then
+if ! grep -qE '^\s*>\s*\*\*Status\*\*:\s*`?FINALIZED`?[[:space:]]*$' ".gsd/SPEC.md"; then
     echo "Error: SPEC.md must have Status: FINALIZED before planning" >&2
     exit 1
 fi
@@ -447,3 +447,4 @@ Plans:
 | `planner` | Detailed planning methodology |
 | `plan-checker` | Validates plans before execution |
 </related>
+
