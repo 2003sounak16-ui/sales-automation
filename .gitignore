@@ -30,8 +30,6 @@ sales-automation/
 /out/
 /build
 
-# npm lockfile (not committing)
-package-lock.json
 .DS_Store
 *.pem
 npm-debug.log*
