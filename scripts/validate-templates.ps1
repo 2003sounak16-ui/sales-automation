@@ -8,9 +8,17 @@ $TemplatesChecked = 0
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host " GSD ► VALIDATING TEMPLATES" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-Write-Host ""
+$targetDir = ".gsd/templates"
+if (-not (Test-Path $targetDir)) {
+    Write-Host "❌ Missing $targetDir directory" -ForegroundColor Red
+    exit 1
+}
 
-$templates = Get-ChildItem ".gsd/templates/*.md"
+$templates = @(Get-ChildItem -Path $targetDir -Filter "*.md" -File -ErrorAction SilentlyContinue)
+if ($templates.Count -eq 0) {
+    Write-Host "❌ No template files found in $targetDir" -ForegroundColor Red
+    exit 1
+}
 
 foreach ($file in $templates) {
     $TemplatesChecked++

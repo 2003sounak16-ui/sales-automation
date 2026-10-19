@@ -69,7 +69,7 @@ Identify project type from markers:
 Test-Path "package.json"
 
 # Python
-Test-Path "requirements.txt" -or Test-Path "pyproject.toml"
+(Test-Path "requirements.txt") -or (Test-Path "pyproject.toml")
 
 # Rust
 Test-Path "Cargo.toml"

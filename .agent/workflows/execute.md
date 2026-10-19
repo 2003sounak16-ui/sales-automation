@@ -67,7 +67,7 @@ test -f ".gsd/STATE.md"
 **PowerShell:**
 ```powershell
 # Check phase exists in roadmap
-Select-String -Path ".gsd/ROADMAP.md" -Pattern "Phase $PHASE:"
+Select-String -Path ".gsd/ROADMAP.md" -Pattern "Phase ${PHASE}:"
 ```
 
 **Bash:**
@@ -110,6 +110,14 @@ Get-ChildItem "$PHASE_DIR/*-PLAN.md"
 ls "$PHASE_DIR"/*-PLAN.md 2>/dev/null
 ```
 
+**If no plans found:**
+Phase is unplanned. Do not mark complete. Direct user to plan the phase first:
+```
+❌ No plans found in $PHASE_DIR.
+Run /plan {N} first to generate execution plans.
+```
+Exit.
+
 **Check for existing summaries** (completed plans):
 
 **PowerShell:**
@@ -122,11 +130,16 @@ Get-ChildItem "$PHASE_DIR/*-SUMMARY.md"
 ls "$PHASE_DIR"/*-SUMMARY.md 2>/dev/null
 ```
 
-**Build list of incomplete plans** (PLAN without matching SUMMARY).
+**Build list of incomplete plans:**
+A plan is incomplete if:
+- It lacks a matching `*-SUMMARY.md`, OR
+- Its `SUMMARY.md` has `status: failed` or `status: partial` (or failed verification).
 
 **If `--gaps-only`:** Filter to only plans with `gap_closure: true` in frontmatter.
 
-**If no incomplete plans found:** Phase already complete, skip to step 8.
+**If all plans have successful summaries:**
+All individual plans are executed, but the overall phase goal must still be verified.
+Proceed to **Step 7 (Verify Phase Goal)** to confirm completion before updating roadmap and state.
 
 ---
 
@@ -325,8 +338,17 @@ Phase {N} executed successfully. {X} plans, {Y} tasks completed.
 
 ## 9. Commit Phase Completion
 
+**PowerShell:**
+```powershell
+git add .gsd/ROADMAP.md .gsd/STATE.md
+if (Test-Path ".gsd/REQUIREMENTS.md") { git add .gsd/REQUIREMENTS.md }
+git commit -m "docs(phase-{N}): complete {phase-name}"
+```
+
+**Bash:**
 ```bash
-git add .gsd/ROADMAP.md .gsd/STATE.md .gsd/REQUIREMENTS.md
+git add .gsd/ROADMAP.md .gsd/STATE.md
+[ -f ".gsd/REQUIREMENTS.md" ] && git add .gsd/REQUIREMENTS.md
 git commit -m "docs(phase-{N}): complete {phase-name}"
 ```
 

@@ -77,6 +77,8 @@ Copy-Item -Recurse ".gsd-install-temp\scripts" ".\"
 Copy-Item -Force ".gsd-install-temp\PROJECT_RULES.md" ".\"
 Copy-Item -Force ".gsd-install-temp\GSD-STYLE.md" ".\"
 Copy-Item -Force ".gsd-install-temp\model_capabilities.yaml" ".\"
+if (Test-Path ".gsd-install-temp\VERSION") { Copy-Item -Force ".gsd-install-temp\VERSION" ".\" }
+if (Test-Path ".gsd-install-temp\CHANGELOG.md") { Copy-Item -Force ".gsd-install-temp\CHANGELOG.md" ".\" }
 ```
 
 **Bash:**
@@ -94,6 +96,8 @@ cp -r .gsd-install-temp/scripts ./
 cp .gsd-install-temp/PROJECT_RULES.md ./
 cp .gsd-install-temp/GSD-STYLE.md ./
 cp .gsd-install-temp/model_capabilities.yaml ./
+[ -f .gsd-install-temp/VERSION ] && cp .gsd-install-temp/VERSION ./
+[ -f .gsd-install-temp/CHANGELOG.md ] && cp .gsd-install-temp/CHANGELOG.md ./
 ```
 
 ---

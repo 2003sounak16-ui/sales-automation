@@ -8,9 +8,17 @@ $WorkflowsChecked = 0
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host " GSD ► VALIDATING WORKFLOWS" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-Write-Host ""
+$targetDir = ".agent/workflows"
+if (-not (Test-Path $targetDir)) {
+    Write-Host "❌ Missing $targetDir directory" -ForegroundColor Red
+    exit 1
+}
 
-$workflows = Get-ChildItem ".agent/workflows/*.md"
+$workflows = @(Get-ChildItem -Path $targetDir -Filter "*.md" -File -ErrorAction SilentlyContinue)
+if ($workflows.Count -eq 0) {
+    Write-Host "❌ No workflow files found in $targetDir" -ForegroundColor Red
+    exit 1
+}
 
 foreach ($file in $workflows) {
     $WorkflowsChecked++

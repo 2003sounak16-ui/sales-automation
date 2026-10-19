@@ -37,7 +37,8 @@ Your invocation prompt provides:
 | `research_path` | Optional `.gsd/phases/{phase}/RESEARCH.md` to read first |
 
 Read in order: `.gsd/SPEC.md` (must be FINALIZED), `.gsd/ROADMAP.md` (the phase goal and
-must-haves), `.gsd/STATE.md`, then `research_path` if provided.
+must-haves), `.gsd/STATE.md`, `.gsd/DECISIONS.md` (for user scope/approach decisions from /discuss-phase),
+then `research_path` if provided.
 
 # Planning Rules
 

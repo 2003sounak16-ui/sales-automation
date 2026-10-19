@@ -9,9 +9,22 @@ workflows_checked=0
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo " GSD ► VALIDATING WORKFLOWS"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
+target_dir=".agent/workflows"
+if [ ! -d "$target_dir" ]; then
+    echo "❌ Missing $target_dir directory"
+    exit 1
+fi
 
-for file in .agent/workflows/*.md; do
+shopt -s nullglob
+workflow_files=("$target_dir"/*.md)
+shopt -u nullglob
+
+if [ ${#workflow_files[@]} -eq 0 ]; then
+    echo "❌ No workflow files found in $target_dir"
+    exit 1
+fi
+
+for file in "${workflow_files[@]}"; do
     ((workflows_checked++))
     filename=$(basename "$file")
     has_errors=false

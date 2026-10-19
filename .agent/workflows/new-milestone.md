@@ -101,26 +101,36 @@ If DECISIONS.md or JOURNAL.md contain entries from a previous milestone, reset t
 
 **PowerShell:**
 ```powershell
-# Only reset if files are non-empty and no archive exists yet
+# Archive decisions and journal if files contain entries from previous work
+$archiveDir = ".gsd/milestones/pre-$name"
 if ((Test-Path ".gsd/DECISIONS.md") -and (Get-Content ".gsd/DECISIONS.md" | Measure-Object -Line).Lines -gt 5) {
-    Set-Content ".gsd/DECISIONS.md" "# Decisions`n`n---`n"
+    New-Item -ItemType Directory -Force $archiveDir | Out-Null
+    Copy-Item ".gsd/DECISIONS.md" "$archiveDir/DECISIONS.md"
+    Set-Content ".gsd/DECISIONS.md" "# Decisions`n`n> Previous decisions archived in $archiveDir/DECISIONS.md`n`n---`n"
 }
 if ((Test-Path ".gsd/JOURNAL.md") -and (Get-Content ".gsd/JOURNAL.md" | Measure-Object -Line).Lines -gt 5) {
-    Set-Content ".gsd/JOURNAL.md" "# Journal`n`n---`n"
+    New-Item -ItemType Directory -Force $archiveDir | Out-Null
+    Copy-Item ".gsd/JOURNAL.md" "$archiveDir/JOURNAL.md"
+    Set-Content ".gsd/JOURNAL.md" "# Journal`n`n> Previous journal entries archived in $archiveDir/JOURNAL.md`n`n---`n"
 }
 ```
 
 **Bash:**
 ```bash
+archive_dir=".gsd/milestones/pre-$name"
 if [ -f ".gsd/DECISIONS.md" ] && [ "$(wc -l < .gsd/DECISIONS.md)" -gt 5 ]; then
-    printf '# Decisions\n\n---\n' > .gsd/DECISIONS.md
+    mkdir -p "$archive_dir"
+    cp ".gsd/DECISIONS.md" "$archive_dir/DECISIONS.md"
+    printf "# Decisions\n\n> Previous decisions archived in %s/DECISIONS.md\n\n---\n" "$archive_dir" > .gsd/DECISIONS.md
 fi
 if [ -f ".gsd/JOURNAL.md" ] && [ "$(wc -l < .gsd/JOURNAL.md)" -gt 5 ]; then
-    printf '# Journal\n\n---\n' > .gsd/JOURNAL.md
+    mkdir -p "$archive_dir"
+    cp ".gsd/JOURNAL.md" "$archive_dir/JOURNAL.md"
+    printf "# Journal\n\n> Previous journal entries archived in %s/JOURNAL.md\n\n---\n" "$archive_dir" > .gsd/JOURNAL.md
 fi
 ```
 
-> **Note:** Only resets if files have grown beyond a header. If running `/complete-milestone` first, files are already archived and reset.
+> **Note:** Existing entries are automatically backed up to `.gsd/milestones/pre-{name}/` before reset so no prior discussions or decisions are lost. If `/complete-milestone` was run first, files are already archived in the completed milestone directory.
 
 ---
 

@@ -9,9 +9,22 @@ skills_checked=0
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo " GSD ► VALIDATING SKILLS"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
+target_dir=".agents/skills"
+if [ ! -d "$target_dir" ]; then
+    echo "❌ Missing $target_dir directory"
+    exit 1
+fi
 
-for skill_dir in .agents/skills/*/; do
+shopt -s nullglob
+skill_dirs=("$target_dir"/*/)
+shopt -u nullglob
+
+if [ ${#skill_dirs[@]} -eq 0 ]; then
+    echo "❌ No skill directories found in $target_dir"
+    exit 1
+fi
+
+for skill_dir in "${skill_dirs[@]}"; do
     ((skills_checked++))
     skill_name=$(basename "$skill_dir")
     skill_file="$skill_dir/SKILL.md"

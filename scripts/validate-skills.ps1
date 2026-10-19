@@ -8,9 +8,17 @@ $SkillsChecked = 0
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host " GSD ► VALIDATING SKILLS" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-Write-Host ""
+$targetDir = ".agents/skills"
+if (-not (Test-Path $targetDir)) {
+    Write-Host "❌ Missing $targetDir directory" -ForegroundColor Red
+    exit 1
+}
 
-$skills = Get-ChildItem ".agents/skills" -Directory
+$skills = @(Get-ChildItem -Path $targetDir -Directory -ErrorAction SilentlyContinue)
+if ($skills.Count -eq 0) {
+    Write-Host "❌ No skill directories found in $targetDir" -ForegroundColor Red
+    exit 1
+}
 
 foreach ($skill in $skills) {
     $SkillsChecked++

@@ -9,9 +9,22 @@ templates_checked=0
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo " GSD ► VALIDATING TEMPLATES"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
+target_dir=".gsd/templates"
+if [ ! -d "$target_dir" ]; then
+    echo "❌ Missing $target_dir directory"
+    exit 1
+fi
 
-for file in .gsd/templates/*.md; do
+shopt -s nullglob
+template_files=("$target_dir"/*.md)
+shopt -u nullglob
+
+if [ ${#template_files[@]} -eq 0 ]; then
+    echo "❌ No template files found in $target_dir"
+    exit 1
+fi
+
+for file in "${template_files[@]}"; do
     ((templates_checked++))
     filename=$(basename "$file")
     has_errors=false

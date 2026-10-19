@@ -11,9 +11,6 @@
 set -e
 
 PATTERN="${1:-}"
-SEARCH_PATH="${2:-.}"
-shift 2 2>/dev/null || true
-EXTRA_ARGS="$@"
 
 if [[ -z "$PATTERN" ]]; then
     echo "Usage: search_repo.sh <pattern> [path] [options]"
@@ -25,10 +22,21 @@ if [[ -z "$PATTERN" ]]; then
     exit 1
 fi
 
+shift 1
+
+if [[ $# -gt 0 && "$1" != -* ]]; then
+    SEARCH_PATH="$1"
+    shift 1
+else
+    SEARCH_PATH="."
+fi
+
+EXTRA_ARGS=("$@")
+
 # Try ripgrep first (fastest)
 if command -v rg &> /dev/null; then
     echo "# Using ripgrep" >&2
-    rg "$PATTERN" "$SEARCH_PATH" $EXTRA_ARGS --color=always
+    rg "$PATTERN" "$SEARCH_PATH" "${EXTRA_ARGS[@]}" --color=always
     exit $?
 fi
 
@@ -36,23 +44,26 @@ fi
 echo "# Using grep (install ripgrep for better performance)" >&2
 
 # Convert common rg options to grep options
-GREP_ARGS=""
-for arg in $EXTRA_ARGS; do
+GREP_ARGS=()
+i=0
+while [ $i -lt ${#EXTRA_ARGS[@]} ]; do
+    arg="${EXTRA_ARGS[$i]}"
     case "$arg" in
         --type)
-            # Next argument is the type, skip both
-            ;;
-        ts|js|py|go|rs|md)
-            GREP_ARGS="$GREP_ARGS --include=*.$arg"
+            ((i++))
+            if [ $i -lt ${#EXTRA_ARGS[@]} ]; then
+                type_arg="${EXTRA_ARGS[$i]}"
+                GREP_ARGS+=("--include=*.$type_arg")
+            fi
             ;;
         *)
-            # Pass through other arguments
-            GREP_ARGS="$GREP_ARGS $arg"
+            GREP_ARGS+=("$arg")
             ;;
     esac
+    ((i++))
 done
 
-grep -rn "$PATTERN" "$SEARCH_PATH" $GREP_ARGS --color=always 2>/dev/null || {
+grep -rn "$PATTERN" "$SEARCH_PATH" "${GREP_ARGS[@]}" --color=always 2>/dev/null || {
     echo "No matches found for: $PATTERN"
     exit 0
 }

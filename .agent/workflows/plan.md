@@ -120,19 +120,27 @@ Discovery is MANDATORY unless you can prove current context exists.
 
 **PowerShell:**
 ```powershell
-# Check SPEC.md exists and is finalized
+# Check SPEC.md exists and has Status: FINALIZED
+if (-not (Test-Path ".gsd/SPEC.md")) {
+    Write-Error ".gsd/SPEC.md not found"
+    exit 1
+}
 $spec = Get-Content ".gsd/SPEC.md" -Raw
-if ($spec -notmatch "FINALIZED") {
-    Write-Error "SPEC.md must be FINALIZED before planning"
-    exit
+if ($spec -notmatch "(?m)^\s*>\s*\*\*Status\*\*:\s*`?FINALIZED`?") {
+    Write-Error "SPEC.md must have Status: FINALIZED before planning"
+    exit 1
 }
 ```
 
 **Bash:**
 ```bash
-# Check SPEC.md exists and is finalized
-if ! grep -q "FINALIZED" ".gsd/SPEC.md"; then
-    echo "Error: SPEC.md must be FINALIZED before planning" >&2
+# Check SPEC.md exists and has Status: FINALIZED
+if [ ! -f ".gsd/SPEC.md" ]; then
+    echo "Error: .gsd/SPEC.md not found" >&2
+    exit 1
+fi
+if ! grep -qiE "^\s*>\s*\*\*Status\*\*:\s*`?FINALIZED`?" ".gsd/SPEC.md"; then
+    echo "Error: SPEC.md must have Status: FINALIZED before planning" >&2
     exit 1
 fi
 ```
@@ -157,7 +165,7 @@ Extract from $ARGUMENTS:
 
 **PowerShell:**
 ```powershell
-Select-String -Path ".gsd/ROADMAP.md" -Pattern "Phase $PHASE:"
+Select-String -Path ".gsd/ROADMAP.md" -Pattern "Phase ${PHASE}:"
 ```
 
 **Bash:**
@@ -272,6 +280,7 @@ Load:
 - `.gsd/SPEC.md` — Requirements
 - `.gsd/REQUIREMENTS.md` — Formal requirements tracking (if exists)
 - `.gsd/ROADMAP.md` — Phase description
+- `.gsd/DECISIONS.md` — Scope, approach, and constraints agreed in `/discuss-phase` (if exists)
 - `$PHASE_DIR/RESEARCH.md` — If exists
 - `.gsd/ARCHITECTURE.md` — If exists
 
