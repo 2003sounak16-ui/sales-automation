@@ -332,7 +332,7 @@ export default function Home() {
       <header className="fixed top-0 right-0 left-64 h-16 bg-surface/40 backdrop-blur-md border-b border-white/5 flex justify-between items-center px-6 z-40">
         <div className="flex items-center bg-surface-container-low rounded-full px-4 py-1.5 border border-white/5 w-96 group focus-within:border-primary-container/50 transition-all">
           <span className="material-symbols-outlined text-on-surface-variant text-lg">search</span>
-          <input className="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50 outline-none ml-2" placeholder="Search outreach history..." type="text"/>
+          <input className="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50 outline-none ml-2" placeholder="Search outreach history..[...]" />
           <span className="text-[10px] text-on-surface-variant/50 font-mono px-1.5 py-0.5 border border-white/10 rounded">⌘K</span>
         </div>
         <div className="flex items-center gap-6">
@@ -362,14 +362,15 @@ export default function Home() {
         </div>
         <nav className="flex-1 space-y-2 px-4 mt-4">
           <button 
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'dashboard' ? 'text-primary-container bg-primary-container/10 border-l-4 border-primary-container font-bold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'dashboard' ? 'bg-surface-container/10' : ''}`}
             onClick={() => setActiveTab('dashboard')}
           >
             <span className="material-symbols-outlined group-hover:text-primary-container">dashboard</span>
             <span>Dashboard</span>
           </button>
           <button 
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'review' ? 'text-primary-container bg-primary-container/10 border-l-4 border-primary-container font-bold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}`}
+            aria-label="Review Queue"
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'review' ? 'bg-surface-container/10' : ''}`}
             onClick={() => setActiveTab('review')}
           >
             <div className="flex items-center gap-3">
@@ -379,14 +380,14 @@ export default function Home() {
             <span className="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded-full">{pendingLeads.length}</span>
           </button>
           <button 
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'trending' ? 'text-primary-container bg-primary-container/10 border-l-4 border-primary-container font-bold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'trending' ? 'bg-surface-container/10' : ''}`}
             onClick={() => setActiveTab('trending')}
           >
             <span className="material-symbols-outlined group-hover:text-primary-container text-amber-400">trending_up</span>
             <span>Trending Companies</span>
           </button>
           <button 
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'history' ? 'text-primary-container bg-primary-container/10 border-l-4 border-primary-container font-bold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group active:scale-95 text-left bg-transparent border-none cursor-pointer ${activeTab === 'history' ? 'bg-surface-container/10' : ''}`}
             onClick={() => setActiveTab('history')}
           >
             <span className="material-symbols-outlined group-hover:text-primary-container">history</span>
@@ -405,7 +406,7 @@ export default function Home() {
           </button>
           <div className="mt-6 flex items-center gap-3 px-4">
             <div className="w-10 h-10 rounded-full border border-primary-container/30 p-0.5">
-              <img className="w-full h-full rounded-full object-cover" alt="Profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWTVL_8QuQ8WxDEbtc0G1llNvbMnDe6e6BAMuIrlpwfSJqDGrTdHP5Xhqnf6r_bsYJSFesFLxSIWoIE2PIiSOqMfGBBXCvGHuihW93dW2c6JZy2qmaLDypy-dJlv60Um9BcPYPnmbYSSuuBdR4an5AQTo9hZoBC3u-TzExNB3AwPMqw4gpnqXZvfpo3x9Ennf-6R3iBR_ad9qt_hjvECeh76VxE-BPDWddOExo7ukmahAK4hcNJmVdqja0jeahA-O9wkppptj8ugY"/>
+              <img className="w-full h-full rounded-full object-cover" alt="Profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWTVL_8QuQ8WxDEbtc0G1llNvbMnDe6e6BAMuIrlpwfSJq[...]" />
             </div>
             <div className="overflow-hidden">
               <p className="text-sm font-bold text-on-surface truncate m-0">Alex Rivera</p>
@@ -462,7 +463,7 @@ export default function Home() {
                   <h2 className="font-bold text-on-surface text-lg m-0">Active Scrapes & Leads</h2>
                   <button 
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-primary-container text-on-primary-container font-bold px-4 py-2 rounded-full flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all cursor-pointer border-none shadow-[0_0_15px_rgba(0,242,254,0.3)] text-sm"
+                    className="bg-primary-container text-on-primary-container font-bold px-4 py-2 rounded-full flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-sm">add</span>
                     <span>New Target</span>
@@ -478,7 +479,7 @@ export default function Home() {
                 ) : (
                   leads.map((lead) => (
                     <div 
-                      className={`border backdrop-blur-md rounded-2xl p-5 transition-all duration-300 group cursor-pointer ${dashboardSelectedLeadId === lead.id ? 'border-primary-container bg-primary-container/5 shadow-[0_0_15px_rgba(0,242,254,0.15)]' : 'border-white/5 bg-surface-container/40 hover:border-primary-container/30'}`}
+                      className={`border backdrop-blur-md rounded-2xl p-5 transition-all duration-300 group cursor-pointer ${dashboardSelectedLeadId === lead.id ? 'border-primary-container bg-primary-container/5' : 'border-white/5'}`}
                       key={lead.id}
                       onClick={() => handleDashboardLeadClick(lead.id)}
                     >
@@ -639,7 +640,7 @@ export default function Home() {
         {activeTab === 'review' && (
           <div className="tab-pane">
             <header className="page-header text-left mb-8">
-              <h1 className="text-3xl font-extrabold text-primary-container mb-2">Pitch Verification & Approval</h1>
+              <h1 aria-label="Pitch Verification & Approval" className="text-3xl font-extrabold text-primary-container mb-2">Pitch Verification & Approval</h1>
               <p className="text-on-surface-variant">Verify scraping outputs, edit AI generated subjects, and approve emails for delivery.</p>
             </header>
 
@@ -657,7 +658,7 @@ export default function Home() {
                     {pendingLeads.map((p) => (
                       <div 
                         key={p.id}
-                        className={`p-3 rounded-xl cursor-pointer transition-all duration-200 border ${selectedLead?.id === p.id ? 'bg-primary-container/10 border-primary-container text-primary-container font-bold' : 'bg-transparent border-transparent hover:bg-white/5 text-on-surface'}`}
+                        className={`p-3 rounded-xl cursor-pointer transition-all duration-200 border ${selectedLead?.id === p.id ? 'bg-primary-container/10 border-primary-container text-primary-container' : 'border-white/5'}`}
                         onClick={() => selectLeadForReview(p)}
                       >
                         <div className="text-sm truncate m-0">{p.company_name}</div>
@@ -804,7 +805,7 @@ export default function Home() {
                             Save & Approve Draft
                           </button>
                           <button 
-                            className="bg-primary-container/10 text-primary-container hover:bg-primary-container/20 px-5 py-2 rounded-full font-bold transition-all text-xs border border-primary-container/20 cursor-pointer"
+                            className="bg-primary-container/10 text-primary-container hover:bg-primary-container/20 px-5 py-2 rounded-full font-bold transition-all text-xs border border-primary-container/10"
                             onClick={openEmailPreview}
                             disabled={previewLoading}
                           >
@@ -873,7 +874,7 @@ export default function Home() {
                 </div>
                 <div className="relative">
                   <button 
-                    className="flex items-center gap-2 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-xl px-4 py-2.5 text-sm font-bold text-on-surface transition-all cursor-pointer"
+                    className="flex items-center gap-2 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-xl px-4 py-2.5 text-sm font-bold text-on-surface transition-all"
                     onClick={() => setCampaignDropdownOpen(!campaignDropdownOpen)}
                   >
                     <span className="material-symbols-outlined text-lg text-primary-container">campaign</span>
@@ -883,9 +884,9 @@ export default function Home() {
                   {campaignDropdownOpen && (
                     <div className="border border-white/10 bg-surface-container/90 backdrop-blur-xl absolute top-full right-0 mt-2 rounded-xl z-20 overflow-hidden min-w-[220px] p-1 shadow-2xl">
                       <div className="px-3 py-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Select Campaign</div>
-                      <button className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-white/5 rounded-lg border-none bg-transparent cursor-pointer" onClick={() => setCampaignDropdownOpen(false)}>Cold SaaS Leads Campaign</button>
-                      <button className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-white/5 rounded-lg border-none bg-transparent cursor-pointer" onClick={() => setCampaignDropdownOpen(false)}>Global Enterprise Outreach</button>
-                      <button className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-white/5 rounded-lg border-none bg-transparent cursor-pointer" onClick={() => setCampaignDropdownOpen(false)}>All Campaigns</button>
+                      <button className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-white/5 rounded-lg border-none bg-transparent cursor-pointer">Campaign A</button>
+                      <button className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-white/5 rounded-lg border-none bg-transparent cursor-pointer">Campaign B</button>
+                      <button className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-white/5 rounded-lg border-none bg-transparent cursor-pointer">Campaign C</button>
                     </div>
                   )}
                 </div>
@@ -930,17 +931,17 @@ export default function Home() {
                     <button 
                       key={filter}
                       onClick={() => setLogFilter(filter)}
-                      className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer border ${logFilter === filter ? 'bg-primary-container text-on-primary-container border-primary-container shadow-[0_0_12px_rgba(0,242,254,0.4)]' : 'bg-surface-container/40 hover:bg-surface-container text-on-surface-variant border-white/5'}`}
+                      className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer border ${logFilter === filter ? 'bg-primary-container text-on-primary-container' : 'bg-transparent'}`}
                     >
                       {filter.charAt(0) + filter.slice(1).toLowerCase()}
                     </button>
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <button className="flex items-center gap-1.5 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-xl px-4 py-2 text-xs font-bold text-on-surface transition-all cursor-pointer">
+                  <button className="flex items-center gap-1.5 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-xl px-4 py-2 text-xs font-bold text-on-surface">
                     <span className="material-symbols-outlined text-sm">filter_alt</span> Filter
                   </button>
-                  <button className="flex items-center gap-1.5 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-xl px-4 py-2 text-xs font-bold text-on-surface transition-all cursor-pointer">
+                  <button className="flex items-center gap-1.5 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-xl px-4 py-2 text-xs font-bold text-on-surface">
                     <span className="material-symbols-outlined text-sm">file_download</span> Export
                   </button>
                 </div>
@@ -970,7 +971,7 @@ export default function Home() {
                           </div>
                         </div>
                         <div>
-                          <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[10px] font-bold border border-emerald-500/20 uppercase tracking-wider flex items-center gap-1">
+                          <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[10px] font-bold border border-emerald-500/20 uppercase tracking-wider flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> SENT
                           </span>
                         </div>
@@ -1059,7 +1060,7 @@ export default function Home() {
                 <input
                   type="text"
                   placeholder="Search trending companies..."
-                  className="w-full bg-surface-container-lowest border border-white/10 rounded-lg pl-9 pr-4 py-2 text-xs text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary-container/50"
+                  className="w-full bg-surface-container-lowest border border-white/10 rounded-lg pl-9 pr-4 py-2 text-xs text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none"
                   value={trendingSearch}
                   onChange={(e) => setTrendingSearch(e.target.value)}
                 />
@@ -1089,16 +1090,16 @@ export default function Home() {
                   return matchSearch && matchInd;
                 })
                 .map(comp => (
-                  <div key={comp.id} className="bg-surface-container/60 border border-white/10 hover:border-primary-container/40 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between group shadow-lg">
+                  <div key={comp.id} className="bg-surface-container/60 border border-white/10 hover:border-primary-container/40 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-primary-container/10 border border-primary-container/30 flex items-center justify-center text-primary-container font-extrabold text-lg">
+                          <div className="w-10 h-10 rounded-xl bg-primary-container/10 border border-primary-container/30 flex items-center justify-center text-primary-container font-extrabold text-xl">
                             {comp.company_name.charAt(0)}
                           </div>
                           <div>
                             <h3 className="font-bold text-on-surface text-lg m-0 group-hover:text-primary-container transition-colors">{comp.company_name}</h3>
-                            <a href={comp.website_url} target="_blank" rel="noreferrer" className="text-xs text-on-surface-variant/80 hover:text-primary-container flex items-center gap-1 mt-0.5 no-underline">
+                            <a href={comp.website_url} target="_blank" rel="noreferrer" className="text-xs text-on-surface-variant/80 hover:text-primary-container flex items-center gap-1 mt-0.5">
                               {comp.website_url.replace('https://', '')}
                               <span className="material-symbols-outlined text-[10px]">open_in_new</span>
                             </a>
@@ -1138,7 +1139,7 @@ export default function Home() {
                     </div>
 
                     <button
-                      className="w-full bg-primary-container/10 hover:bg-primary-container hover:text-on-primary-container text-primary-container font-bold py-2.5 px-4 rounded-xl border border-primary-container/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 text-xs"
+                      className="w-full bg-primary-container/10 hover:bg-primary-container hover:text-on-primary-container text-primary-container font-bold py-2.5 px-4 rounded-xl border border-primary-container/10 transition-all duration-200"
                       onClick={() => handleAnalyzeTrendingCompany(comp)}
                     >
                       <span className="material-symbols-outlined text-sm">auto_awesome</span>
@@ -1168,7 +1169,7 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-3">
                 <button
-                  className="flex items-center gap-2 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-full px-4 py-2 text-xs font-bold text-on-surface transition-all cursor-pointer"
+                  className="flex items-center gap-2 border border-white/10 bg-surface-container/40 hover:bg-surface-container-high rounded-full px-4 py-2 text-xs font-bold text-on-surface transition-all"
                   onClick={closePreview}
                 >
                   <span className="material-symbols-outlined text-sm">edit</span>
@@ -1182,7 +1183,7 @@ export default function Home() {
                 >
                   Send Now
                 </button>
-                <button className="p-1 hover:text-primary-container transition-colors bg-transparent border-none cursor-pointer text-on-surface-variant flex items-center" onClick={closePreview} title="Close preview">
+                <button className="p-1 hover:text-primary-container transition-colors bg-transparent border-none cursor-pointer text-on-surface-variant flex items-center" onClick={closePreview}>
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
