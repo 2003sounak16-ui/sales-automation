@@ -6,13 +6,13 @@ updated: 2026-10-19T14:48:00Z
 
 # Roadmap
 
-> **Current Phase:** Phase 1: Test Infrastructure & Mock Services
+> **Current Phase:** Phase 2: Database & Data Access Layer Tests
 > **Status:** ⬜ Not Started
 
 ## Must-Haves (from SPEC)
 
-- [ ] Automated pytest test framework configured and runnable
-- [ ] Mock fixtures implemented for Groq LLM, Resend email, and DuckDuckGo discovery
+- [x] Automated pytest test framework configured and runnable
+- [x] Mock fixtures implemented for Groq LLM, Resend email, and DuckDuckGo discovery
 - [ ] Database CRUD and event timeline tests passing with SQLite fallback
 - [ ] All FastAPI endpoints covered by automated unit/integration tests
 - [ ] Scraper service hardened against network timeouts, invalid URLs, and missing contacts
@@ -22,13 +22,13 @@ updated: 2026-10-19T14:48:00Z
 ## Phases
 
 ### Phase 1: Test Infrastructure & Mock Services
-**Status:** 🔄 In Progress
+**Status:** ✅ Complete
 **Objective:** Establish the testing environment with pytest, fixtures, and mocked third-party services so tests run completely offline and deterministically.
 **Requirements:** REQ-01, REQ-02
 
 **Plans:**
-- [ ] Plan 1.1: Pytest configuration, dependencies, and test database harness
-- [ ] Plan 1.2: Deterministic mock fixtures for Groq LLM, Resend, and DuckDuckGo
+- [x] Plan 1.1: Pytest configuration, dependencies, and test database harness
+- [x] Plan 1.2: Deterministic mock fixtures for Groq LLM, Resend, and DuckDuckGo
 
 ---
 
